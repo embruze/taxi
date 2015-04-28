@@ -142,6 +142,10 @@ p4
 qqnorm(dfb2$avgbrdist, 
        ylab='Distance to Roadbed', 
        main= 'Q-Q Plot of Distance to Roadbed')
+
+qqnorm(dfb2$dist_bldg_hght, 
+       ylab='Distributed Building Height', 
+       main= 'Q-Q Plot of Distributed Building Height')
 ```
 
 Pick-up and drop off count by block
@@ -177,20 +181,42 @@ boxplot(dfb2$pctcbbldg, #boxplot - distance to roadbed
 
 ```{r}
 dfb2$mavgbrdist <- dfb2$avgbrdist*0.3048
-dfb2$logavgbrdist <- log(dfb2$logavgbrdist)
+dfb2$mavgbrdist1 <- dfb2$avgbrdist+.00000001
+dfb2$logmavgbrdist1 <- log(dfb2$mavgbrdist1)
 ```
 
 
 ```{r}
-dfb2$logavgbrdist <- dfb2$avgbrdist + .00000001
+dfb2$logmavgbrdist <- dfb2$avgbrdist + .00000001
 dfb2$logavgbrdist <- log(dfb2$logavgbrdist)
 ```
 
 ```{r}
-fit1 <- lm(dfb2$dist_bldg_hght ~ dfb2$logavgbrdist)
+fit1 <- lm(dfb2$dist_bldg_hght ~ dfb2$logmavgbrdist1)
 summary(fit1) 
 confint(fit1, level=0.95)
 ```
 
-vgbrdist * 0.3048
+summary(dfb2$logmavgbrdist1)
+quantile(dfb2$dist_bldg_hght) 
 
+dfb2$q3dist_bldg_hght <- dfb2$dist_bldg_hght>=4.013
+
+
+dfb2$q3mdist_bldg_hght <- dfb2$q3dist_bldg_hght*0.3048
+dfb2$q3mdist_bldg_hght <- dfb2$q3mdist_bldg_hght+.00000001
+dfb2$logmqmavgbrdist1 <- log(dfb2$mqavgbrdist1)
+
+dfb2$q3dist_bldg_hght <- dfb2$dist_bldg_hght>=4.013
+
+fit3 <- lm(dfb2$q3dist_bldg_hght ~ dfb2$logmqmavgbrdist1)
+summary(fit3) 
+confint(fit3, level=0.95)
+
+
+
+dfb2$q3dist_bldg_hght <- dfb2$dist_bldg_hght>=4.013
+dfb2$qdist_bldg_hght <- dfb2$dist_bldg_hght>=4.013
+fit3 <- lm(dfb2$qdist_bldg_hght ~ dfb2$logmqmavgbrdist1)
+summary(fit3) 
+confint(fit3, level=0.95)
